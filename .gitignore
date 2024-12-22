@@ -1,0 +1,28 @@
+# Переменные окружения
+.env
+.env.local
+.env.*.local
+
+# Конфигурации редакторов
+.idea/
+.vscode/
+*.iml
+
+# Локальные настройки
+*.local
+
+# Общие временные файлы
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# Python кэш
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Docker
+docker-compose.override.yml
+.dockerignore

@@ -1,0 +1,48 @@
+
+
+include:
+  - proxy.yaml
+
+volumes:
+  db_mysql:
+
+services:
+   
+  ingress-proxy-override:
+    extends:
+      file: proxy.yaml
+      service: ingress-proxy
+    ports:
+      - "8090:8090"
+    network_mode: host
+
+  db:
+    image: mysql:8
+    restart: on-failure
+    env_file:
+      - .env
+    volumes:
+      - /var/lib/docker/volumes/db_mysql/_data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      backend:
+        ipv4_address: 172.20.0.10
+
+  web:
+    build:
+          dockerfile: Dockerfile.python
+    restart: on-failure
+    environment:
+      - DB_HOST=db
+      - DB_TABLE=requests
+      - DB_USER=test_user
+      - DB_NAME=test_db
+      - DB_PASSWORD=test_password
+    depends_on:
+      - db
+    ports:
+      - 5000:5000
+    networks:
+      backend:
+        ipv4_address: 172.20.0.5
